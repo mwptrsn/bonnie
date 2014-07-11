@@ -4,9 +4,13 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 require './lib/ext/record'
 
-require 'turn'
+require 'minitest/autorun'
+require "minitest/reporters"
+Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
+# require 'turn'
 
 class ActiveSupport::TestCase
+  extend MiniTest::Spec::DSL
  
   def dump_database
     Mongoid.default_session.collections.each do |c|
