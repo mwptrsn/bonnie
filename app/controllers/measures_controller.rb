@@ -74,6 +74,10 @@ class MeasuresController < ApplicationController
         measure = Measures::SourcesLoader.load_measure_xml(params[:measure_file].tempfile.path, current_user, params[:vsac_username], params[:vsac_password], measure_details, true, false, effectiveDate, true) # overwrite_valuesets=true, cache=false, includeDraft=true
       elsif extension == '.cql'
         measure = Measures::SourcesLoader.load_measure_cql(params[:measure_file].tempfile.path, current_user, params[:vsac_username], params[:vsac_password], measure_details, true, false, effectiveDate, true) # overwrite_valuesets=true, cache=false, includeDraft=true
+        title = File.basename( params[:measure_file].original_filename, ".*" )
+        title.gsub!(/([A-Z]+)([A-Z][a-z])/,'\1_\2')
+        title.gsub!(/([a-z\d])([A-Z])/,'\1_\2')
+        measure.title = title.tr("-", "_").gsub("_", " ")
       else
         measure = Measures::MATLoader.load(params[:measure_file], current_user, measure_details)
       end
